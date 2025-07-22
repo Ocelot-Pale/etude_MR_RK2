@@ -1,0 +1,116 @@
+\documentclass[11pt]{article}
+
+% Encodage & langue
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{arrows.meta, positioning, calc}
+
+% Maths
+\usepackage{amssymb, amsthm}
+\usepackage{amsmath}
+\usepackage[backend=biber, style=numeric, citestyle=numeric, maxnames=3]{biblatex}
+\addbibresource{references.bib}
+% Marges
+\usepackage[a4paper,margin=1.5cm]{geometry}
+
+% Liens
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+
+% Figures
+\usepackage{graphicx}
+\usepackage{float}
+
+% Théorèmes
+\newtheorem{theoreme}{Théorème}[section]
+\newtheorem{proposition}[theoreme]{Proposition}
+\newtheorem{lemme}[theoreme]{Lemme}
+\newtheorem{corollaire}[theoreme]{Corollaire}
+\theoremstyle{definition}
+\newtheorem{definition}[theoreme]{Définition}
+\newtheorem{exemple}[theoreme]{Exemple}
+\theoremstyle{remark}
+\newtheorem{remarque}[theoreme]{Remarque}
+
+% Environnement pour les preuves
+\newcommand{\pt}{\partial_t}
+\newcommand{\px}{\partial_x}
+\newcommand{\pxx}{\partial_x^{(2)}}
+\newcommand{\pxxx}{\partial_x^{(3)}}
+\newcommand{\pxxxx}{\partial_x^{(4)}}
+\newcommand{\dgot}{ \text{\gothfamily{D}}}
+\newcommand{\doublehat}[1]{\widehat{\widehat{#1}}}
+\newcommand{\dlbar}{{\overline{\Delta l}}}
+
+% Titres
+\title{Impact théorique de la multirésolution adaptative sur la convergence temporelle les méthodes des lignes}
+\author{Alexandre Edeline}%\\ \small{ENSTA Paris, adresse email}}
+\date{\today}
+% Dérivées temporelles
+\newcommand{\dt}[1]{\partial_t #1}
+\newcommand{\dtt}[1]{\partial_{tt} #1}
+\newcommand{\dttt}[1]{\partial_{ttt} #1}
+
+% Dérivées spatiales (selon x)
+\newcommand{\dx}[1]{\partial_x #1}
+\newcommand{\dxx}[1]{\partial_{xx} #1}
+\newcommand{\dxxx}[1]{\partial_{xxx} #1}
+
+% Variante avec dérivée totale si besoin
+\newcommand{\Dt}[1]{\frac{d #1}{dt}}
+\newcommand{\Dtt}[1]{\frac{d^2 #1}{dt^2}}
+\newcommand{\Dx}[1]{\frac{d #1}{dx}}
+\newcommand{\Dxx}[1]{\frac{d^2 #1}{dx^2}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Nous analysons, sur un cas test simple, les effets de la multirésolution adaptative sur l'ordre de convergence temporel d'une méthode des lignes. Nous montrons que les erreurs induites par la structure adaptative peuvent polluer l'intégration en temps, réduisant l'ordre global de la méthode.
+\end{abstract}
+
+\section{Introduction}
+    \input{parts/0_Introduciton.tex}
+\newpage
+\section{Problème cible}
+    Nous cherchons à résoudre le problème de diffusion suivant :
+    \begin{align}
+        \dt{u} = D \dxx{u}.
+    \end{align}
+    Nous ignorons les problèmatiques de conditions de bords.
+        \subsection{Méthode des lignes utilisée}
+            \input{parts/1_problemeCible/1_methodeDesLignes}
+        \subsection{multirésolution adaptative}
+            \input{parts/1_problemeCible/2_multiresolutionAdapative}
+\newpage
+\section{Équations équivalentes}
+    Dans cette partie nous calculons les équations équivalentes du schéma numérique avec et sans multirésolution adaptative.
+    L'équation équivalente d'un schéma est l'EDP dont la solution satisfait le schéma. Elle est calculée formellement par des développements de Taylor.
+    Comparer l'équation équivalente et l'équation cible fait alors naturellement aparaitre les termes d'érreur. 
+    Dans les parties suivante beaucoup de calculs ont été réalisés grâce à librairie de calcul formeel Sympy\footnote{https://www.sympy.org}
+    \input{parts/2_equations_equivalentes/_schema}
+    \subsection{Équation équivalente sans multirésolution}
+    \input{parts/2_equations_equivalentes/1_equationModifie_sansMR}
+    \subsection{Équation équivalente avec multirésolution}
+    \input{parts/2_equations_equivalentes/2_equationModifie_avecMR}
+
+\newpage
+\section{Mais d'où vient cette perte d'ordre ?}
+    Un ordre de précision a été perdu en temps. Nous essayons a présent de comprendre quel mécanisme mène à cette baisse de performances.
+    Ma démarche consiste à comparer les équations équivalentes avec et sans multirésolution, \textbf{avant} d'appliquer la procéduer de Cauchy-Kovaleskaya.
+    \subsection{Équation équivalente sans multirésolution avant Cauchy-Kovaleskaya}
+    \input{parts/3_PerteOrdre/1_sansMR.tex}
+    \subsection{Équation équivalente avec multirésolution avant Cauchy-Kovaleskaya}
+    \input{parts/3_PerteOrdre/2_avecMR.tex}
+
+\section{Conclusion provisoire...}
+    \input{parts/5_Conclusion.tex}
+
+\printbibliography
+
+
+\end{document}

@@ -1,0 +1,14 @@
+\begin{align}
+    \frac{\partial u}{\partial t}  =&+ D \frac{\partial^{2}u}{\partial x^{2}} 
+    + \Delta x^{2} \frac{D}{12}             \frac{\partial^{4}u}{\partial x^{4}} 
+    -  \Delta t^{2} \frac{D^{3}}{6}          \frac{\partial^{6}u}{\partial x^{6}} 
+    -  \Delta t^{3} \frac{D^{4}}{24}        \frac{\partial^{8}u}{\partial x^{8}}.
+\end{align}
+Le schéma de base est donc bien d'ordre deux en espace et en temps.
+En supposant une relation de stabilité du type $\lambda = \frac{D\, \Delta t }{\Delta x^2}$:
+\begin{align}
+    \frac{\partial u}{\partial t}  =&\; D \frac{\partial^{2}u}{\partial x^{2}} 
+    + \Delta x^{2} \frac{D}{12}             \frac{\partial^{4}u}{\partial x^{4}}
+    - \Delta x^{4} \frac{D \lambda^2}{6}     \frac{\partial^{6}u}{\partial x^{6}}
+    - \Delta x^{6} \frac{D \lambda^3}{24}    \frac{\partial^{8}u}{\partial x^{8}}.
+\end{align}

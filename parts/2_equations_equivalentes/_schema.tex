@@ -1,0 +1,24 @@
+\begin{center}
+\begin{tikzpicture}[node distance=1cm, every node/.style={font=\small}, >=latex]
+
+% Nodes
+\node (scheme) [draw, rectangle, fill=blue!10] {Schéma numérique};
+
+\node (dl) [draw, rectangle, below=.5cm of scheme, fill=orange!10] {Développement de Taylor en espace et en temps};
+
+\node (ck) [draw,dashed, rectangle, below=.5cm of dl, fill=orange!10] {Cauchy-Kowalevski};
+
+\node (relation) [draw, dashed, rectangle, below=.5cm of ck, fill=orange!10] {Hypothèse : $\Delta t = f(\Delta x$)};
+
+\node (eqeq) [draw, rectangle, below=.5cm of relation, fill=red!10] {Équation équivalente};
+
+% Arrows
+\draw[->, thick] (scheme) -- (dl);
+\draw[->, thick] (dl) -- (ck);
+\draw[->, thick] (ck) -- (relation);
+\draw[->, thick] (relation) -- (eqeq);
+% Titles
+\node[above of=scheme, node distance=1.2cm, font=\bfseries] {Processus de d'obtenton d’une équation équivalente};
+
+\end{tikzpicture}
+\end{center}

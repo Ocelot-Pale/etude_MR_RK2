@@ -1,0 +1,10 @@
+L'équation modifiée sans multirésolution, avant procédure de Cauchy-Kovaleskaya est:
+\begin{align}
+    \frac{\partial u}{\partial t}  &= D \frac{\partial^{2} u}{\partial x^{2}} \\\notag
+        &+ \frac{1}{2} \underbrace{\Bigl(D^{2}\frac{\partial^{4} u}{\partial x^{4}} - \frac{\partial^{2} u}{\partial t^{2}} \Bigr)}_{\substack{\text{Se compense par} \\ \text{la procédure de} \\ \text{Cauchy-Kovaleskaya}}} \Delta t
+        + \frac{D}{12} \frac{\partial^{4} u}{\partial x^{4}}  \Delta x^{2}
+        - \frac{1}{24} \frac{\partial^{4} u}{\partial t^{4}}  \Delta t^{3} 
+        - \frac{1}{6}  \frac{\partial^{3} u}{\partial t^{3}}  \Delta t^{2}.
+\end{align}
+La méthode est bien d'ordre un, car à l'ordre un : $\frac{\partial u}{\partial t}  = D \frac{\partial^{2} u}{\partial x^{2}}$ et donc le terme $D^{2}\frac{\partial^{4} u}{\partial x^{4}} - \frac{\partial^{2} u}{\partial t^{2}}$
+se compense au cours de la procédure de Cauchy-Kovaleskaya.
