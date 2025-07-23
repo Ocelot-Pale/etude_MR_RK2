@@ -1,0 +1,30 @@
+\paragraph{Première étape : développement de Taylor}
+Dans un premier temps, on suppose l'existence d'une fonction assez régulière vérifiant le schéma.
+Dans le schéma numérique les termes $u^{n+\delta_t}_{k+\delta_x}$ sont remplacés par leur pendant
+continus: $u(x+\delta_x \Delta x, t + \delta_t \Delta t)$. Puis on réalise le dévelopmment de Taylor suivant : 
+\begin{align}
+    u(x+\delta_x \Delta x, t + \delta_t \Delta t) &= u(x+\delta_x \Delta x , t) 
+        + \sum_{i} \frac{(\delta_x \Delta x )^j}{j!} \frac{\partial^j u}{\partial t^j }(x+\delta_x \Delta x)\\\notag
+    &= u(x , t) 
+        + \sum_i  \frac{(\delta_x \Delta x)^i}{i!} 
+                \frac{\partial^i u}{\partial x^i}u(x,t)
+        + \sum_j  \frac{(\delta_x \Delta x )^j}{j!} 
+                \frac{\partial^j u}{\partial^j t}(x,t)
+        + \sum_{i,j}  \frac{(\delta_x \Delta x )^{i}(\delta_t \Delta t )^{j}}  {i! \times j!}
+                \frac{\partial^{j+i} u}     {\partial t^j \partial x^i}(x,t)
+\end{align}
+L'équation au dérivée partielles qui apparait est l'équation équivalente. libre à nous de la tronquer à l'ordre qui nous convient.
+\paragraph{Deuxième étape : procédure de Cauchy-Kovaleskaya (optionnel)}
+Afin d'enrichir l'analyse, et permettre le développement de schéma couplé espace-temps, l'étape précédente est généralement suivie d'une procédure de Cauchy-Kovaleskaya.
+La procédure de Cauchy-Kovaleskaya consiste à utiliser la rélation entre les dérivées en espace et en temps données par l'équation cible et remplacer les dérivées en temps par des dérivées en espace dans l'équation équivalente. 
+Cela consiste simple à partir de l'équation : $\dt{u} = D \dxx{u}$ et décrire de manière itérée : 
+\begin{align}
+    \dtt{u} &= D^2 \frac{\partial^4 u }{\partial x^4}\\\notag
+    \dttt{u}&= D^3 \frac{\partial^6 u }{\partial x^6}\\\notag
+    &\vdots\\\notag
+    \frac{\partial^n u}{\partial x^n} &=D^n \frac{\partial^{2n} u}{\partial x^{2n}}
+\end{align}
+\paragraph{Ultime étape étape : relation entre le pas de temps et d'espace (optionnel)}
+Lorsque l'on utilise un schéma en pratique, il est courrant de supposer une relation entre les pas d'espace et de temps, par exmeple une condition de stabilité du type 
+$\Delta t \propto \frac{\Delta x^2}{D}$.
+Il est donc très utile d'injecter cette relation dans l'équation équivalente pour comprendre le comportement du schéma en conditions réelles.
