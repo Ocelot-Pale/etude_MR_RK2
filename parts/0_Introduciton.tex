@@ -1,11 +1,12 @@
 Nous allons résoudre un problème classique de diffusion par méthode des lignes avec multirésolution adaptative.
 La multirésolution est une méthode de compression de maillage très efficace pour accéléler les calculs et réduire les contraintes mémoires.
 Elle repose sur une compression par transformée en ondelette et sur des interpolateurs polynomiaux permettant une reconstruction-prédiction
-les données au niveau de précision choisit\footnote{Il s'agit d'une opération de décompression}.\\
-La multirésolution adaptative détruit intrisèqement l'information en deçà d'un certain seuil\footnote{Le seuil de compression}. De même 
-si l'opérateur de reconstruction-prédiction n'est pas parfait et son ordre dépend d'un \textit{stencil}
+les données au niveau de précision choisit\footnote{C'est l'opération permettant de décompresser l'information}.\\
+La multirésolution adaptative détruit donc intrisèqement l'information en deçà d'un certain seuil\footnote{Le seuil de compression}. De même 
+l'opérateur de reconstruction-prédiction n'est pas exacte, son ordre dépend d'un \textit{stencil}
 \footnote{Le stencil désigne le nombre de cellules entrée du prédicteur. Un grand stencil donne un bon ordre de précision mais le coût de la reconstruction
 augmente linéairement avec ce dernier.} Ainsi la multirésolution vient aux prix de deux sources d'erreur pilotées par $\varepsilon$ le seuil de compression
 et par $s$ le stencil de l'opérateur de reconstruction-prédiction.\\
-Nous nous proposons d'étudier, en calculant des équations équivalente les impacts théoriques de la multirésolution adaptative. Il semble que la multirésolution adaptative
-pourrait altérer significativement l'ordre de convergence temporel des méthodes des lignes.
+Nous nous proposons d'étudier, en calculant des équations équivalente les impacts théoriques de la multirésolution adaptative 
+sur une méthode des lignes pour la diffusion.
+Il semble que la multirésolution adaptative pourrait altérer l'ordre de convergence temporel des méthodes des lignes.

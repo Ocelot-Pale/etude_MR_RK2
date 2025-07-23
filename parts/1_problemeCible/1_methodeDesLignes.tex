@@ -9,7 +9,7 @@ Puis une méthode de Runge und Kutta explicite d'ordre deux sur l'opératur lin�
     &+ D \frac{\Delta t}{\Delta x} \Bigl(\frac{U_{k+1} - 2 U_{k} + U_{k-1}}{\Delta x}\Bigr)\\ \notag
     &+ D^2 \frac{\Delta t^2}{\Delta x^2} \Bigl(\frac{U_{k+2} -4 U_{k+1}  +6 U_{k} -4 U_{k-1} + U_{k-2}}{\Delta x^2}\Bigr).
 \end{align}
-Cela se remet sous la forme d'un schéma conservatif sous du type:
+Cela s'écrit sous la forme conservative suivante:
 \begin{align}
     u^{n+1}_k = u^n_k + \lambda \Bigl( \Phi^n_{k+1/2} - \Phi^n_{k-1/2} \Bigr)
 \end{align}
