@@ -6,12 +6,9 @@ def afficheSimpy(expr) :
     display(Math(sp.latex(expr)))
     return 
 
-
-
-
 def rendreJoli(expr, u, x, t, dx, dt, ORDER_SERIES):
     """
-    Retourne un latex de expr de osrte à bien isoler le puissances des deltaX et deltaT 
+    Retourne un latex isolant le puissances des deltaX et deltaT à l'affichage.
     """
     orders = range(0, ORDER_SERIES + 1) # Liste des ordres de dérivés temporelles que l'expression est suceptible de porter 
     dxs = [dx**n for n in orders] # Liste des puissances de deltaX 

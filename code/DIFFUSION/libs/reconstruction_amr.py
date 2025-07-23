@@ -38,40 +38,34 @@ def computeFlux(u,x,t,dl,dx,cfl,ORDER_SERIES,stencil=1):
     plusFlux_RK1 = (coeffs_RK1 * Pdl * Us_plusFlux_currentLevel)[0,0]
     flux_variation_RK1 = cfl_effective * (plusFlux_RK1-minusFlux_RK1)
 
-    # if CHRISTIAN_VERSION : 
-    #     coeffs_Christian = sp.Matrix([[
-    #         sp.Rational(-1,2)*(cfl-sp.Rational(1,6)) ,
-    #         sp.Rational(3,2)*(cfl-sp.Rational(1,6))-1,
-    #         1-sp.Rational(3,2)*(cfl-sp.Rational(1,6)),
-    #         sp.Rational(1,2)*(cfl-sp.Rational(1,6)) ,
-    #                         ]])
-    #     minusFlux_Christian = (coeffs_Christian * Pdl * Us_minusFlux_currentLevel)[0,0]
-    #     plusFlux_Christian = (coeffs_Christian * Pdl * Us_plusFlux_currentLevel)[0,0]
-    #     flux_variation_Christian = cfl_effective * (plusFlux_Christian-minusFlux_Christian)
+    coeffs_Christian = sp.Matrix([[
+        sp.Rational(-1,2)*(cfl-sp.Rational(1,6)) ,
+        sp.Rational(3,2)*(cfl-sp.Rational(1,6))-1,
+        1-sp.Rational(3,2)*(cfl-sp.Rational(1,6)),
+        sp.Rational(1,2)*(cfl-sp.Rational(1,6)) ,
+                        ]])
+    minusFlux_Christian = (coeffs_Christian * Pdl * Us_minusFlux_currentLevel)[0,0]
+    plusFlux_Christian = (coeffs_Christian * Pdl * Us_plusFlux_currentLevel)[0,0]
+    flux_variation_Christian = cfl_effective * (plusFlux_Christian-minusFlux_Christian)
 
-    #     return  flux_variation_RK2,flux_variation_RK1,flux_variation_Christian
-    return  flux_variation_RK2,flux_variation_RK1
+    return  flux_variation_RK2,flux_variation_RK1,flux_variation_Christian
 
 
-def computeEqModif(u,x,t,dl,dx,dt,cfl,ORDER_SERIES,stencil=1,DEBUG=0) : 
-    CAUCHY_KOVALESKAYA = False
-    #if CHRISTIAN_VERSION :  flux_total_RK2,flux_total_RK1,flux_total_Christian = computeFlux(u,x,t,dl,dx,cfl,ORDER_SERIES,stencil=1) 
-    flux_total_RK2,flux_total_RK1 = computeFlux(u,x,t,dl,dx,cfl,ORDER_SERIES,stencil=1)
-
+def computeEqModif(u,x,t,dl,dx,dt,D,cfl,ORDER_SERIES,CAUCHY_KOVALESKAYA=True,stencil=1,DEBUG=0) : 
+    flux_total_RK2,flux_total_RK1,flux_total_Christian = computeFlux(u,x,t,dl,dx,cfl,ORDER_SERIES,stencil=1) 
     rhs = (1/dt*flux_total_RK2).expand()
     rhs_RK1 = (1/dt*flux_total_RK1).expand()
-    #if CHRISTIAN_VERSION : rhs_Christian = (1/dt*flux_total_Christian).expand()
+    rhs_Christian = (1/dt*flux_total_Christian).expand()
     lhs = (1/dt * (developpement_taylor_temps(u,dt,ORDER_SERIES,x,t) - u(x,t))).expand()
     rhs = rhs - (lhs - sp.diff(u(x,t),t,1))
     rhs_RK1 = rhs_RK1-(lhs - sp.diff(u(x,t),t,1))
-    #if CHRISTIAN_VERSION : rhs_Christian = rhs_Christian-(lhs - sp.diff(u(x,t),t,1))
+    hs_Christian = rhs_Christian-(lhs - sp.diff(u(x,t),t,1))
     lhs = sp.diff(u(x,t),t,1)
     if CAUCHY_KOVALESKAYA : 
         rhs=apply_cauchy_kovaleskaya(rhs,u,x,t,D,ORDER_SERIES)  
         rhs_RK1=apply_cauchy_kovaleskaya(rhs_RK1,u,x,t,D,ORDER_SERIES)  
-        #if CHRISTIAN_VERSION : rhs_Christian=apply_cauchy_kovaleskaya(rhs_Christian,u,x,t,D,ORDER_SERIES)  
+        rhs_Christian=apply_cauchy_kovaleskaya(rhs_Christian,u,x,t,D,ORDER_SERIES)  
     tex =sp.latex(lhs) + "=" + sp.latex(rhs)
     tex_RK1 =sp.latex(lhs) + "=" + sp.latex(rhs_RK1)
-    # if CHRISTIAN_VERSION : tex_Christian = sp.latex(lhs) + "=" + sp.latex(rhs_Christian)
-    # if CHRISTIAN_VERSION : return {"RK2":(lhs,rhs,tex),"RK1":(lhs,rhs_RK1,tex_RK1),"Christian" : (lhs,rhs_Christian,tex_Christian)}
-    return {"RK2":(lhs,rhs,tex),"RK1":(lhs,rhs_RK1,tex_RK1)}
+    tex_Christian = sp.latex(lhs) + "=" + sp.latex(rhs_Christian)
+    return {"RK2":(lhs,rhs,tex),"RK1":(lhs,rhs_RK1,tex_RK1),"Christian" : (lhs,rhs_Christian,tex_Christian)}
