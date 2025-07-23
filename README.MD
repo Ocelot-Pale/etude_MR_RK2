@@ -1,0 +1,1 @@
+1. Utiliser le script compile_latex.sh pour compiler le fichier latex
