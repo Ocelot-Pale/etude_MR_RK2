@@ -24,15 +24,25 @@ def computeFlux(u,x,t,dl,dx,cfl,ORDER_SERIES,stencil=1):
     cfl_effective = cfl*(2**(-dl))
     Pdl = initP(stencil)**dl # Calcul de la matrice de passage au travers de deltaL couches
     coeffs = sp.Matrix([[
-        sp.Rational(-1,2)*cfl ,
-        sp.Rational(3,2)*cfl-1,
-        1-sp.Rational(3,2)*cfl,
-        sp.Rational(1,2)*cfl,]])
+        sp.Rational(-1,2)*cfl_effective,
+        +sp.Rational(3,2)*cfl_effective-1,
+        -sp.Rational(3,2)*cfl_effective+1,
+        sp.Rational(1,2)*cfl_effective,
+        ]])
+    
+    coeffs_1 = sp.Matrix([[0,-1,1,0,]])
+    coeffs_2 = sp.Matrix([[sp.Rational(-1,2),sp.Rational(-3,2),sp.Rational(3,2),sp.Rational(1,2),]])
+    
     Us_minusFlux_currentLevel = sp.Matrix([developpement_taylor_spatial(u,dx_currentLevel*delta,ORDER_SERIES,x,t) for delta in range(-2,2)])
     Us_plusFlux_currentLevel = sp.Matrix([developpement_taylor_spatial(u,dx_currentLevel*delta,ORDER_SERIES,x,t)  for delta in range(-1,3)])
     minusFlux = (coeffs * Pdl * Us_minusFlux_currentLevel)[0,0]
     plusFlux  = (coeffs * Pdl *  Us_plusFlux_currentLevel)[0,0]
-    flux_variation_RK2 = cfl_effective * (plusFlux-minusFlux)
+    flux_variation_RK2_v1 = cfl_effective * (plusFlux-minusFlux)
+    minusFlux = ((cfl_effective*coeffs_1+cfl_effective**2*coeffs_2)*(Pdl * Us_minusFlux_currentLevel))[0,0]
+    plusFlux  = ((cfl_effective*coeffs_1+cfl_effective**2*coeffs_2)*(Pdl *  Us_plusFlux_currentLevel))[0,0]
+    flux_variation_RK2 = (plusFlux-minusFlux)
+
+
     coeffs_RK1 = sp.Matrix([[0,-1,1,0,]])
     minusFlux_RK1 = (coeffs_RK1 * Pdl * Us_minusFlux_currentLevel)[0,0]
     plusFlux_RK1 = (coeffs_RK1 * Pdl * Us_plusFlux_currentLevel)[0,0]
@@ -59,7 +69,7 @@ def computeEqModif(u,x,t,dl,dx,dt,D,cfl,ORDER_SERIES,CAUCHY_KOVALESKAYA=True,ste
     lhs = (1/dt * (developpement_taylor_temps(u,dt,ORDER_SERIES,x,t) - u(x,t))).expand()
     rhs = rhs - (lhs - sp.diff(u(x,t),t,1))
     rhs_RK1 = rhs_RK1-(lhs - sp.diff(u(x,t),t,1))
-    hs_Christian = rhs_Christian-(lhs - sp.diff(u(x,t),t,1))
+    rhs_Christian = rhs_Christian-(lhs - sp.diff(u(x,t),t,1))
     lhs = sp.diff(u(x,t),t,1)
     if CAUCHY_KOVALESKAYA : 
         rhs=apply_cauchy_kovaleskaya(rhs,u,x,t,D,ORDER_SERIES)  
